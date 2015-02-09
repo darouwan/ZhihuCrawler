@@ -9,9 +9,7 @@ __author__ = 'Junfeng'
 
 headers = {'Use-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}
 startUrl = "http://www.zhihu.com/people/darouwan-chen"
-req = urllib.request.Request(startUrl, headers=headers)
-data = urllib.request.urlopen(req).read()
-content = bs4.BeautifulSoup(data)
+
 profile_complete = []
 profile_ready = [startUrl]
 # print(content)
@@ -35,39 +33,42 @@ def discoverProfile(profile_url):
             femaleGenders = profile.find_all('i', 'icon icon-profile-female')
             if len(femaleGenders) > 0:
                 print(name, ' is female')
+    discoverNewLinks(profile_content)
 
 
-links = content.find_all('a', href=re.compile(r'people'))
-for link in links:
-    # print(link.get('href'))
-    rawUrl = link.get('href')
-    if not rawUrl.startswith('http:'):
-        rawUrl = 'http://www.zhihu.com' + rawUrl
+def discoverNewLinks(profile_content):
+    links = profile_content.find_all('a', href=re.compile(r'people'))
+    for link in links:
+        # print(link.get('href'))
+        rawurl = link.get('href')
+        if not rawurl.startswith('http:'):
+            rawurl = 'http://www.zhihu.com' + rawurl
 
-    if rawUrl.endswith('/about'):
-        continue
-    if rawUrl.endswith('/asks'):
-        continue
-    if rawUrl.endswith('/answers'):
-        continue
-    if rawUrl.endswith('/posts'):
-        continue
-    if rawUrl.endswith('/collections'):
-        continue
-    if rawUrl.endswith('/logs'):
-        continue
-    if rawUrl.endswith('/followees'):
-        continue
-    if rawUrl.endswith('/followers'):
-        continue
-    if rawUrl.endswith('/columns/followed'):
-        continue
-    if rawUrl.endswith('/topics'):
-        continue
+        if rawurl.endswith('/about'):
+            continue
+        if rawurl.endswith('/asks'):
+            continue
+        if rawurl.endswith('/answers'):
+            continue
+        if rawurl.endswith('/posts'):
+            continue
+        if rawurl.endswith('/collections'):
+            continue
+        if rawurl.endswith('/logs'):
+            continue
+        if rawurl.endswith('/followees'):
+            continue
+        if rawurl.endswith('/followers'):
+            continue
+        if rawurl.endswith('/columns/followed'):
+            continue
+        if rawurl.endswith('/topics'):
+            continue
 
-    # print(rawUrl)
-    if (rawUrl not in profile_complete) & (rawUrl not in profile_ready):
-        profile_ready.append(rawUrl)
+        # print(rawUrl)
+        if (rawurl not in profile_complete) & (rawurl not in profile_ready):
+            profile_ready.append(rawurl)
+
 
 while len(profile_ready) > 0:
     for startUrl in profile_ready:
