@@ -39,7 +39,7 @@ def discoverProfile(profile_url):
     discovernewlinks(profile_content)
     count = getfollowerscount(profile_content)
 
-    if name != '':
+    if name != '' and int(count) > 1000:
         print(name, '\t is \t', gender, '\t followers:\t', count)
 
 
@@ -73,7 +73,7 @@ def discovernewlinks(profile_content):
             continue
 
         # print(rawUrl)
-        if (rawurl not in profile_complete) & (rawurl not in profile_ready):
+        if (rawurl not in profile_complete) and (rawurl not in profile_ready):
             profile_ready.append(rawurl)
 
 
