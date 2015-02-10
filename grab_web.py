@@ -22,23 +22,25 @@ def discoverProfile(profile_url):
     profile_data = urllib.request.urlopen(profile_req).read()
     profile_content = bs4.BeautifulSoup(profile_data)
     profiles = profile_content.find_all('div', 'zm-profile-header-main')
+    name = ''
     for profile in profiles:
         names = profile.find_all('span', 'name')
         gender = ''
         if len(names) > 0:
             name = names[0].contents[0]
 
-        maleGenders = profile.find_all('i', 'icon icon-profile-male')
-        if len(maleGenders) > 0:
+        male_genders = profile.find_all('i', 'icon icon-profile-male')
+        if len(male_genders) > 0:
             gender = 'male'
         else:
-            femaleGenders = profile.find_all('i', 'icon icon-profile-female')
-            if len(femaleGenders) > 0:
+            female_genders = profile.find_all('i', 'icon icon-profile-female')
+            if len(female_genders) > 0:
                 gender = 'female'
     discovernewlinks(profile_content)
     count = getfollowerscount(profile_content)
 
-    print(name, '\t is \t', gender, '\t followers:\t', count)
+    if name != '':
+        print(name, '\t is \t', gender, '\t followers:\t', count)
 
 
 def discovernewlinks(profile_content):
@@ -76,9 +78,12 @@ def discovernewlinks(profile_content):
 
 
 def getfollowerscount(profile_content):
+    # print(profile_content)
     count = 0
     followers_sections = profile_content.find_all('a', 'item', href=re.compile(r'/followers$'))
-
+    if len(followers_sections) == 0:
+        print('followers section  is null')
+        return 0
     count = followers_sections[0].find_all('strong')[0].contents[0]
 
     # print(count)
