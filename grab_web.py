@@ -4,6 +4,8 @@ import urllib
 
 import bs4
 
+import db
+
 
 __author__ = 'Junfeng'
 
@@ -21,6 +23,7 @@ def discoverProfile(profile_url):
     profile_req = urllib.request.Request(profile_url, headers=headers)
     profile_data = urllib.request.urlopen(profile_req).read()
     profile_content = bs4.BeautifulSoup(profile_data)
+
     profiles = profile_content.find_all('div', 'zm-profile-header-main')
     name = ''
     for profile in profiles:
@@ -36,14 +39,35 @@ def discoverProfile(profile_url):
             female_genders = profile.find_all('i', 'icon icon-profile-female')
             if len(female_genders) > 0:
                 gender = 'female'
-    discovernewlinks(profile_content)
+
+    discover_new_links(profile_content)
     count = getfollowerscount(profile_content)
+    upvotes = get_upvotes(profile_content)
+    thanks = get_thanks(profile_content)
+    if name != '':
+        print(name, '\t is \t', gender, '\t followers:\t', count, '\tupvotes:', upvotes, '\tthanks:', thanks)
+        db.insert_user_data((name, gender, count, upvotes, thanks))
 
-    if name != '' and int(count) > 1000:
-        print(name, '\t is \t', gender, '\t followers:\t', count)
+
+def get_upvotes(profile):
+    profile_header_user_agree = profile.find_all('span', 'zm-profile-header-user-agree')
+    upvotes = 0
+    if len(profile_header_user_agree) > 0:
+        upvotes = profile_header_user_agree[0].find_all('strong')[0].contents[0]
+        upvotes = int(upvotes)
+    return upvotes
 
 
-def discovernewlinks(profile_content):
+def get_thanks(profile):
+    profile_header_user_thanks = profile.find_all('span', 'zm-profile-header-user-thanks')
+    thanks = 0
+    if len(profile_header_user_thanks) > 0:
+        thanks = profile_header_user_thanks[0].find_all('strong')[0].contents[0]
+        thanks = int(thanks)
+    return thanks
+
+
+def discover_new_links(profile_content):
     links = profile_content.find_all('a', href=re.compile(r'people'))
     for link in links:
         # print(link.get('href'))
