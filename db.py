@@ -11,30 +11,33 @@ def connect_db():
 def create_users_table():
     (conn, c) = connect_db()
     c.execute('''CREATE TABLE users
-             (name text, gender text, followers real, upvotes real, thanks real)''')
+             (name text, gender text, followers real, upvotes real, thanks real,time text)''')
     conn.commit()
+    conn.close()
 
 
 def insert_user_data_many(users_info):
     (conn, c) = connect_db()
-    c.executemany("INSERT INTO users VALUES (?,?,?,?,?)", users_info)
+    c.executemany("INSERT INTO users VALUES (?,?,?,?,?,?)", users_info)
     conn.commit()
+    conn.close()
 
 
 def insert_user_data(user_info):
     (conn, c) = connect_db()
     c.execute("SELECT * FROM users WHERE name=?", (user_info[0],))
     if len(c.fetchall()) == 0:
-        c.execute("INSERT INTO users VALUES(?,?,?,?,?)", user_info)
+        c.execute("INSERT INTO users VALUES(?,?,?,?,?,?)", user_info)
         conn.commit()
         print('insert complete')
+    conn.close()
 
 
 def display_all_user():
     (conn, c) = connect_db()
     c.execute("SELECT * FROM users")
     print(c.fetchall())
-
+    conn.close()
 
 if __name__ == '__main__':
     display_all_user()

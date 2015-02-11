@@ -1,6 +1,7 @@
 import re
 import urllib.request
 import urllib
+import time
 
 import bs4
 
@@ -11,7 +12,7 @@ __author__ = 'Junfeng'
 
 headers = {'Use-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}
 startUrl = "http://www.zhihu.com/people/darouwan-chen"
-
+ISOTIMEFORMAT = '%Y-%m-%d %X'
 profile_complete = []
 profile_ready = [startUrl]
 # print(content)
@@ -44,9 +45,11 @@ def discoverProfile(profile_url):
     count = getfollowerscount(profile_content)
     upvotes = get_upvotes(profile_content)
     thanks = get_thanks(profile_content)
+    current_time = time.strftime(ISOTIMEFORMAT, time.localtime(time.time()))
     if name != '':
-        print(name, '\t is \t', gender, '\t followers:\t', count, '\tupvotes:', upvotes, '\tthanks:', thanks)
-        db.insert_user_data((name, gender, count, upvotes, thanks))
+        print(name, '\t is \t', gender, '\t followers:\t', count, '\tupvotes:', upvotes, '\tthanks:', thanks, '\ttime:',
+              current_time)
+        db.insert_user_data((name, gender, count, upvotes, thanks, current_time))
 
 
 def get_upvotes(profile):
