@@ -42,7 +42,7 @@ def discoverProfile(profile_url):
                 gender = 'female'
 
     discover_new_links(profile_content)
-    count = getfollowerscount(profile_content)
+    count = get_followers_count(profile_content)
     upvotes = get_upvotes(profile_content)
     thanks = get_thanks(profile_content)
     current_time = time.strftime(ISOTIMEFORMAT, time.localtime(time.time()))
@@ -104,7 +104,7 @@ def discover_new_links(profile_content):
             profile_ready.append(rawurl)
 
 
-def getfollowerscount(profile_content):
+def get_followers_count(profile_content):
     # print(profile_content)
     count = 0
     followers_sections = profile_content.find_all('a', 'item', href=re.compile(r'/followers$'))
