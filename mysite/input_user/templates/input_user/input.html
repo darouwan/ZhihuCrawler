@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Input the Zhihu id you want to monitor</title>
+</head>
+<body>
+<form action="{% url 'input_user:record' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="name" id="name"/>
+    <input type="submit" value="Submit"/>
+</form>
+</body>
+</html>
