@@ -1,4 +1,3 @@
-
 __author__ = 'Junfeng'
 import sqlite3
 import os
@@ -15,7 +14,6 @@ def connect_db():
 
 def connect_django_db():
     print(mysite.input_user.models.Candidates.objects.all())
-
 
 
 def create_users_table():
@@ -40,6 +38,12 @@ def insert_user_data(user_info):
     conn.close()
 
 
+def insert_user_data_django(pname, pgender, pfollowers, pupvotes, pthanks, pcurrent_time):
+    user = mysite.input_user.models.Users(name=pname, gender=pgender, followers=pfollowers, upvotes=pupvotes,
+                                          thanks=pthanks, time=pcurrent_time)
+    user.save()
+
+
 def insert_candidate_data(user_info):
     (conn, c) = connect_db()
     c.execute("INSERT INTO candidates VALUES(?)", user_info)
@@ -48,9 +52,11 @@ def insert_candidate_data(user_info):
 
 
 def get_all_candidates():
-    (conn, c) = connect_db()
-    c.execute("SELECT name FROM candidates")
-    return c.fetchall()
+    list = []
+    for candidate in mysite.input_user.models.Candidates.objects.all():
+        list.append(candidate.name)
+    # print(list)
+    return list
 
 
 def display_all_user():
@@ -61,4 +67,4 @@ def display_all_user():
 
 
 if __name__ == '__main__':
-    connect_django_db()
+    get_all_candidates()

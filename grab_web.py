@@ -1,8 +1,8 @@
 import re
 import urllib.request
 import urllib
-import time
 
+from django.utils import timezone
 import bs4
 
 import db
@@ -45,11 +45,14 @@ def discoverProfile(profile_url):
     count = get_followers_count(profile_content)
     upvotes = get_upvotes(profile_content)
     thanks = get_thanks(profile_content)
-    current_time = time.strftime(ISOTIMEFORMAT, time.localtime(time.time()))
+    # current_time = time.strftime(ISOTIMEFORMAT, time.localtime(time.time()))
+    timezone.activate('Asia/Shanghai')
+    current_time = timezone.now()
     if name != '':
         print(name, '\t is \t', gender, '\t followers:\t', count, '\tupvotes:', upvotes, '\tthanks:', thanks, '\ttime:',
               current_time)
-        db.insert_user_data((name, gender, count, upvotes, thanks, current_time))
+        # db.insert_user_data((name, gender, count, upvotes, thanks, current_time))
+        db.insert_user_data_django(name, gender, count, upvotes, thanks, current_time)
 
 
 def get_upvotes(profile):
