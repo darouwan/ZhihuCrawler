@@ -38,9 +38,9 @@ def insert_user_data(user_info):
     conn.close()
 
 
-def insert_user_data_django(pname, pgender, pfollowers, pupvotes, pthanks, pcurrent_time):
+def insert_user_data_django(pname, pgender, pfollowers, pupvotes, pthanks, pcurrent_time, candidate):
     user = mysite.input_user.models.Users(name=pname, gender=pgender, followers=pfollowers, upvotes=pupvotes,
-                                          thanks=pthanks, time=pcurrent_time)
+                                          thanks=pthanks, time=pcurrent_time, user_id=candidate)
     user.save()
 
 

@@ -1,7 +1,7 @@
 # Create your views here.
 from django.shortcuts import render
 
-from input_user.models import Candidates
+from input_user.models import Candidates, Users
 
 
 def index(request):
@@ -17,5 +17,7 @@ def record(request):
     return render(request, 'input_user/complete.html', context)
 
 
-def show(request):
+def show(request, user_name):
+    print(user_name)
+    user_entry_list = Users.objects.filter(user_id=user_name)
     return render(request, 'input_user/display.html')

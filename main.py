@@ -12,5 +12,5 @@ if __name__ == '__main__':
         candidates_list.clear()
         candidates_list = db.get_all_candidates()
         for candidate in candidates_list:
-            grab_web.discoverProfile(base_url + candidate)
+            grab_web.discoverProfile(base_url + candidate, candidate)
         time.sleep(20 * 60)

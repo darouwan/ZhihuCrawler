@@ -17,7 +17,7 @@ profile_complete = []
 profile_ready = [startUrl]
 # print(content)
 
-def discoverProfile(profile_url):
+def discoverProfile(profile_url, candidate):
     print(profile_url)
     # headers = {'Use-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}
     # profile_url = "http://www.zhihu.com/people/darouwan-chen"
@@ -52,7 +52,7 @@ def discoverProfile(profile_url):
         print(name, '\t is \t', gender, '\t followers:\t', count, '\tupvotes:', upvotes, '\tthanks:', thanks, '\ttime:',
               current_time)
         # db.insert_user_data((name, gender, count, upvotes, thanks, current_time))
-        db.insert_user_data_django(name, gender, count, upvotes, thanks, current_time)
+        db.insert_user_data_django(name, gender, count, upvotes, thanks, current_time, candidate)
 
 
 def get_upvotes(profile):
