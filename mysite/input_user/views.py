@@ -15,3 +15,7 @@ def record(request):
     candidate.save()
     context = {'condidate': candidate}
     return render(request, 'input_user/complete.html', context)
+
+
+def show(request):
+    return render(request, 'input_user/display.html')

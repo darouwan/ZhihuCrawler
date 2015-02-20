@@ -7,5 +7,5 @@ __author__ = 'Junfeng'
 urlpatterns = patterns('',
                        url(r'^$', views.index, name='index'),
                        url(r'^record$', views.record, name='record'),
-
+                       url(r'^show$', views.show, name='show')
 )
