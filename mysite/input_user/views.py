@@ -20,15 +20,17 @@ def record(request):
 
 
 def show(request, user_name):
-    print(user_name)
+    # print(user_name)
     user_entry_list = Users.objects.filter(user_id=user_name)
     followers_list = []
     upvotes_list = []
     thanks_list = []
+    i = 0
     for user_entry in user_entry_list:
         utc_time = int(time.mktime(user_entry.time.timetuple()) * 1000)
         followers_list.append((utc_time, user_entry.followers))
         upvotes_list.append((utc_time, user_entry.upvotes))
         thanks_list.append((utc_time, user_entry.thanks))
-    context = {'followers_list': followers_list, 'upvotes_list': upvotes_list, 'thanks_list': thanks_list}
+    context = {'followers_list': followers_list[-50:], 'upvotes_list': upvotes_list[-50:],
+               'thanks_list': thanks_list[-50:]}
     return render(request, 'input_user/display.html', context)

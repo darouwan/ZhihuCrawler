@@ -8,15 +8,15 @@
 
     <script>
         $(function () {
-            $('#container').highcharts({
+            $('#followers_chart').highcharts({
                 chart: {
                     type: 'spline'
                 },
                 title: {
-                    text: 'The Zhihu User Stats'
+                    text: 'The Zhihu User followers Stats'
                 },
                 subtitle: {
-                    text: 'Upvotes, Followers, Thanks'
+                    text: 'Followers, Followers, Thanks'
                 },
                 xAxis: {
                     type: 'datetime',
@@ -61,12 +61,111 @@
                         {% endfor %}
 
                     ]
+                }
+                ]
+            });
+
+            $('#upvotes_chart').highcharts({
+                chart: {
+                    type: 'spline'
                 },
+                title: {
+                    text: 'The Zhihu User upvotes Stats'
+                },
+                subtitle: {
+                    text: 'Followers, Followers, Thanks'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: { // don't display the dummy year
+                        minute: '%H:%M',
+                        hour: '%H:%M',
+                        day: '%e. %b',
+                        month: '%e. %b',
+                        year: '%b'
+                    },
+                    title: {
+                        text: 'Date'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Count'
+                    },
+                    min: 0
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x: %b.%e %H:%M }: {point.y} '
+                },
+
+                plotOptions: {
+                    spline: {
+                        marker: {
+                            enabled: true
+                        }
+                    }
+                },
+
+                series: [
                     {
                         name: 'Upvotes',
 
                         data: [
                             {% for entry in upvotes_list %}
+                                [{{entry.0}}, {{entry.1}}],
+                            {% endfor %}
+
+                        ]
+                    }
+                ]
+            });
+
+            $('#thanks_chart').highcharts({
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: 'The Zhihu User thanks Stats'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: { // don't display the dummy year
+                        minute: '%H:%M',
+                        hour: '%H:%M',
+                        day: '%e. %b',
+                        month: '%e. %b',
+                        year: '%b'
+                    },
+                    title: {
+                        text: 'Date'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Count'
+                    },
+                    min: 0
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x: %b.%e %H:%M }: {point.y} '
+                },
+
+                plotOptions: {
+                    spline: {
+                        marker: {
+                            enabled: true
+                        }
+                    }
+                },
+
+                series: [
+                    {
+                        name: 'Thanks',
+
+                        data: [
+                            {% for entry in thanks_list %}
                                 [{{entry.0}}, {{entry.1}}],
                             {% endfor %}
 
@@ -83,7 +182,8 @@
     <title></title>
 </head>
 <body>
-<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
+<div id="followers_chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="upvotes_chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="thanks_chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 </body>
 </html>
