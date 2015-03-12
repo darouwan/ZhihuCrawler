@@ -46,7 +46,7 @@ def discoverProfile(profile_url, candidate):
     upvotes = get_upvotes(profile_content)
     thanks = get_thanks(profile_content)
     # current_time = time.strftime(ISOTIMEFORMAT, time.localtime(time.time()))
-    timezone.activate('Asia/Shanghai')
+    # timezone.activate('Asia/Shanghai')
     current_time = timezone.now()
     if name != '':
         print(name, '\t is \t', gender, '\t followers:\t', count, '\tupvotes:', upvotes, '\tthanks:', thanks, '\ttime:',
