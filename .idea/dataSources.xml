@@ -8,6 +8,9 @@
       <jdbc-url>jdbc:sqlite:D:\workspace\ZhihuCrawler\mysite\db.sqlite3</jdbc-url>
       <libraries>
         <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/xerial-sqlite-license.txt</url>
+        </library>
+        <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/sqlite-jdbc-3.7.6.3-20110609.081603-3.jar</url>
         </library>
       </libraries>
