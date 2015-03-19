@@ -13,8 +13,16 @@ def index(request):
 
 def record(request):
     input_name = request.POST['name']
-    candidate = Candidates(name=input_name)
-    candidate.save()
+
+    candidate = Candidates.objects.filter(name=input_name)
+    print(candidate)
+    if len(candidate) == 0:
+
+        candidate = Candidates(name=input_name)
+        candidate.save()
+    else:
+        print(input_name, ' is not none')
+
     context = {'condidate': candidate}
     return render(request, 'input_user/complete.html', context)
 
@@ -35,3 +43,10 @@ def show(request, user_name):
     context = {'name': name, 'followers_list': followers_list[-50:], 'upvotes_list': upvotes_list[-50:],
                'thanks_list': thanks_list[-50:]}
     return render(request, 'input_user/display.html', context)
+
+
+def showall(request):
+    candidates_list = Candidates.objects.all()
+    print(candidates_list)
+    context = {"candidates_list": candidates_list}
+    return render(request, 'input_user/showall.html', context)

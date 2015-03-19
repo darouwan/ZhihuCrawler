@@ -8,4 +8,5 @@ urlpatterns = patterns('',
                        url(r'^$', views.index, name='index'),
                        url(r'^record$', views.record, name='record'),
                        url(r'^show/(?P<user_name>.+)/$', views.show, name='show')
+url(r'^show$', views.showall, name='showall')
 )
