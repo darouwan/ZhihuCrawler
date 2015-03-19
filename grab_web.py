@@ -4,7 +4,6 @@ import urllib
 
 from django.utils import timezone
 import bs4
-from requests import HTTPError
 
 import db
 
@@ -56,7 +55,7 @@ def discoverProfile(profile_url, candidate):
                   current_time)
             # db.insert_user_data((name, gender, count, upvotes, thanks, current_time))
             db.insert_user_data_django(name, gender, count, upvotes, thanks, current_time, candidate)
-    except HTTPError:
+    except:
         print("HTTPError")
 
 
