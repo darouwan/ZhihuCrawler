@@ -46,7 +46,11 @@ def show(request, user_name):
 
 
 def showall(request):
-    candidates_list = Candidates.objects.all()
-    print(candidates_list)
-    context = {"candidates_list": candidates_list}
+    candidates_result = Candidates.objects.all()
+    candidates_list = []
+    for entry in candidates_result:
+        # print(type(entry))
+        candidates_list.append(entry.name)
+    # print(candidates_list)
+    context = {"candidates_list": candidates_list, "name": "test"}
     return render(request, 'input_user/showall.html', context)
