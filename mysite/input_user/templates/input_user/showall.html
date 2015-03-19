@@ -5,9 +5,18 @@
     <title>All Candidates</title>
 </head>
 <body>
-All Candidates<br/>
+
+Add new user:
+<form action="{% url 'input_user:record' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="name" id="name"/>
+    <input type="submit" value="Submit"/>
+</form>
+
+<br>
 {% for entry in candidates_list %}
-    <a href="{% url 'input_user:show' entry %}">{{ entry }}</a> <br/>
+    <a href="{% url 'input_user:show' entry %}">{{ entry }}</a> <a href="{% url 'input_user:delete' entry %}">Delete</a>
+    <br/>
 {% endfor %}
 </body>
 </html>

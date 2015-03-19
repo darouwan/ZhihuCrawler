@@ -24,7 +24,8 @@ def record(request):
         print(input_name, ' is not none')
 
     context = {'condidate': candidate}
-    return render(request, 'input_user/complete.html', context)
+    # return render(request, 'input_user/complete.html', context)
+    return showall(request)
 
 
 def show(request, user_name):
@@ -33,8 +34,12 @@ def show(request, user_name):
     followers_list = []
     upvotes_list = []
     thanks_list = []
-    i = 0
-    name = user_entry_list[0].name
+    # i = 0
+    # Get the user name in zhihu
+    if len(user_entry_list) > 0:
+        name = user_entry_list[0].name
+    else:
+        name = user_name
     for user_entry in user_entry_list:
         utc_time = int(time.mktime(user_entry.time.timetuple()) * 1000)
         followers_list.append((utc_time, user_entry.followers))
@@ -54,3 +59,8 @@ def showall(request):
     # print(candidates_list)
     context = {"candidates_list": candidates_list, "name": "test"}
     return render(request, 'input_user/showall.html', context)
+
+
+def delete(request, user_name):
+    Candidates.objects.filter(name=user_name).delete()
+    return showall(request)
