@@ -38,16 +38,18 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <h3>当前所有用户</h3>
+            <h3>当前所有用户(点击查看历史记录)</h3>
             <table class="table table-striped">
                 <tr>
-                    <th>用户id</th>
+                    <th>用户名</th>
+                    <th>知乎id</th>
                     <th>操作</th>
                 </tr>
                 {% for entry in candidates_list %}
                     <tr>
-                        <td><a href="{% url 'input_user:show' entry %}">{{ entry }}</a></td>
-                        <td><a href="{% url 'input_user:delete' entry %}">Delete</a></td>
+                        <td><a href="{% url 'input_user:show' entry.0 %}">{{ entry.1 }}</a></td>
+                        <td><a href="http://www.zhihu.com/people/{{ entry.0 }}">{{ entry.0 }}</a></td>
+                        <td><a href="{% url 'input_user:delete' entry.0 %}">Delete</a></td>
                     </tr>
                 {% endfor %}
             </table>

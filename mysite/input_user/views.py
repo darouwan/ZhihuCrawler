@@ -3,7 +3,8 @@ import time
 
 from django.shortcuts import render
 
-from input_user.models import Candidates, Users
+from input_user.models import Candidates
+from input_user.models import Users
 
 
 def index(request):
@@ -55,7 +56,10 @@ def showall(request):
     candidates_list = []
     for entry in candidates_result:
         # print(type(entry))
-        candidates_list.append(entry.name)
+        name = Users.objects.filter(user_id=entry.name)[0].name
+        candidates_list.append((entry.name, name))
+        # print((entry.name, name))
+
     # print(candidates_list)
     context = {"candidates_list": candidates_list, "name": "test"}
     return render(request, 'input_user/showall.html', context)
