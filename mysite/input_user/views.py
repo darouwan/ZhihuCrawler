@@ -56,7 +56,11 @@ def showall(request):
     candidates_list = []
     for entry in candidates_result:
         # print(type(entry))
-        name = Users.objects.filter(user_id=entry.name)[0].name
+        temp_list = Users.objects.filter(user_id=entry.name)
+        if len(temp_list) > 0:
+            name = temp_list[0].name
+        else:
+            name = entry.name
         candidates_list.append((entry.name, name))
         # print((entry.name, name))
 
