@@ -1,3 +1,4 @@
+import gzip
 import re
 import urllib.request
 import urllib
@@ -17,6 +18,7 @@ profile_complete = []
 profile_ready = [startUrl]
 # print(content)
 
+
 def discoverProfile(profile_url, candidate):
     print(profile_url)
     # headers = {'Use-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}
@@ -24,7 +26,7 @@ def discoverProfile(profile_url, candidate):
     try:
         profile_req = urllib.request.Request(profile_url, headers=headers)
         profile_data = urllib.request.urlopen(profile_req).read()
-        profile_content = bs4.BeautifulSoup(profile_data)
+        profile_content = bs4.BeautifulSoup(gzip.decompress(profile_data))
 
         profiles = profile_content.find_all('div', 'zm-profile-header-main')
         name = ''
@@ -57,7 +59,6 @@ def discoverProfile(profile_url, candidate):
             db.insert_user_data_django(name, gender, count, upvotes, thanks, current_time, candidate)
     except:
         print("HTTPError")
-
 
 
 def get_upvotes(profile):
