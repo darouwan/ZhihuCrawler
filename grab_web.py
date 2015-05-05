@@ -1,3 +1,4 @@
+import gzip
 import re
 import urllib.request
 import urllib
@@ -10,53 +11,53 @@ import db
 
 __author__ = 'Junfeng'
 
-headers = {'Use-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}
+headers = {'Use-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6',
+           'Accept-Encoding': 'gzip'}
 startUrl = "http://www.zhihu.com/people/darouwan-chen"
 ISOTIMEFORMAT = '%Y-%m-%d %X'
 profile_complete = []
 profile_ready = [startUrl]
 # print(content)
 
+
 def discoverProfile(profile_url, candidate):
     print(profile_url)
     # headers = {'Use-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}
     # profile_url = "http://www.zhihu.com/people/darouwan-chen"
-    try:
-        profile_req = urllib.request.Request(profile_url, headers=headers)
-        profile_data = urllib.request.urlopen(profile_req).read()
-        profile_content = bs4.BeautifulSoup(profile_data)
 
-        profiles = profile_content.find_all('div', 'zm-profile-header-main')
-        name = ''
-        for profile in profiles:
-            names = profile.find_all('span', 'name')
-            gender = ''
-            if len(names) > 0:
-                name = names[0].contents[0]
+    profile_req = urllib.request.Request(profile_url, headers=headers)
+    profile_data = urllib.request.urlopen(profile_req).read()
+    profile_content = bs4.BeautifulSoup(gzip.decompress(profile_data))
 
-            male_genders = profile.find_all('i', 'icon icon-profile-male')
-            if len(male_genders) > 0:
-                gender = 'male'
-            else:
-                female_genders = profile.find_all('i', 'icon icon-profile-female')
-                if len(female_genders) > 0:
-                    gender = 'female'
+    profiles = profile_content.find_all('div', 'zm-profile-header-main')
+    name = ''
+    for profile in profiles:
+        names = profile.find_all('span', 'name')
+        gender = ''
+        if len(names) > 0:
+            name = names[0].contents[0]
 
-        discover_new_links(profile_content)
-        count = get_followers_count(profile_content)
-        upvotes = get_upvotes(profile_content)
-        thanks = get_thanks(profile_content)
-        # current_time = time.strftime(ISOTIMEFORMAT, time.localtime(time.time()))
-        # timezone.activate('Asia/Shanghai')
-        current_time = timezone.now()
-        if name != '':
-            print(name, '\t is \t', gender, '\t followers:\t', count, '\tupvotes:', upvotes, '\tthanks:', thanks,
-                  '\ttime:',
-                  current_time)
-            # db.insert_user_data((name, gender, count, upvotes, thanks, current_time))
-            db.insert_user_data_django(name, gender, count, upvotes, thanks, current_time, candidate)
-    except:
-        print("HTTPError")
+        male_genders = profile.find_all('i', 'icon icon-profile-male')
+        if len(male_genders) > 0:
+            gender = 'male'
+        else:
+            female_genders = profile.find_all('i', 'icon icon-profile-female')
+            if len(female_genders) > 0:
+                gender = 'female'
+
+    discover_new_links(profile_content)
+    count = get_followers_count(profile_content)
+    upvotes = get_upvotes(profile_content)
+    thanks = get_thanks(profile_content)
+    # current_time = time.strftime(ISOTIMEFORMAT, time.localtime(time.time()))
+    # timezone.activate('Asia/Shanghai')
+    current_time = timezone.now()
+    if name != '':
+        print(name, '\t is \t', gender, '\t followers:\t', count, '\tupvotes:', upvotes, '\tthanks:', thanks,
+              '\ttime:',
+              current_time)
+        # db.insert_user_data((name, gender, count, upvotes, thanks, current_time))
+        db.insert_user_data_django(name, gender, count, upvotes, thanks, current_time, candidate)
 
 
 
