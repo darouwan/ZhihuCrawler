@@ -1,5 +1,6 @@
 import gzip
 import re
+import traceback
 from urllib.error import HTTPError
 import urllib.request
 import urllib
@@ -61,8 +62,9 @@ def discoverProfile(profile_url, candidate):
             # db.insert_user_data((name, gender, count, upvotes, thanks, current_time))
             db.insert_user_data_django(name, gender, count, upvotes, thanks, current_time, candidate)
     except HTTPError:
-        print('HTTP error')
-        HTTPError.with_traceback()
+        # print('HTTP error')
+        traceback.print_exc()
+        # HTTPError.with_traceback()
 
 
 
