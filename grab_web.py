@@ -1,5 +1,6 @@
 import gzip
 import re
+from urllib.error import HTTPError
 import urllib.request
 import urllib
 
@@ -25,39 +26,43 @@ def discoverProfile(profile_url, candidate):
     # headers = {'Use-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}
     # profile_url = "http://www.zhihu.com/people/darouwan-chen"
 
-    profile_req = urllib.request.Request(profile_url, headers=headers)
-    profile_data = urllib.request.urlopen(profile_req).read()
-    profile_content = bs4.BeautifulSoup(gzip.decompress(profile_data))
+    try:
+        profile_req = urllib.request.Request(profile_url, headers=headers)
+        profile_data = urllib.request.urlopen(profile_req).read()
+        profile_content = bs4.BeautifulSoup(gzip.decompress(profile_data))
 
-    profiles = profile_content.find_all('div', 'zm-profile-header-main')
-    name = ''
-    for profile in profiles:
-        names = profile.find_all('span', 'name')
-        gender = ''
-        if len(names) > 0:
-            name = names[0].contents[0]
+        profiles = profile_content.find_all('div', 'zm-profile-header-main')
+        name = ''
+        for profile in profiles:
+            names = profile.find_all('span', 'name')
+            gender = ''
+            if len(names) > 0:
+                name = names[0].contents[0]
 
-        male_genders = profile.find_all('i', 'icon icon-profile-male')
-        if len(male_genders) > 0:
-            gender = 'male'
-        else:
-            female_genders = profile.find_all('i', 'icon icon-profile-female')
-            if len(female_genders) > 0:
-                gender = 'female'
+            male_genders = profile.find_all('i', 'icon icon-profile-male')
+            if len(male_genders) > 0:
+                gender = 'male'
+            else:
+                female_genders = profile.find_all('i', 'icon icon-profile-female')
+                if len(female_genders) > 0:
+                    gender = 'female'
 
-    discover_new_links(profile_content)
-    count = get_followers_count(profile_content)
-    upvotes = get_upvotes(profile_content)
-    thanks = get_thanks(profile_content)
-    # current_time = time.strftime(ISOTIMEFORMAT, time.localtime(time.time()))
-    # timezone.activate('Asia/Shanghai')
-    current_time = timezone.now()
-    if name != '':
-        print(name, '\t is \t', gender, '\t followers:\t', count, '\tupvotes:', upvotes, '\tthanks:', thanks,
-              '\ttime:',
-              current_time)
-        # db.insert_user_data((name, gender, count, upvotes, thanks, current_time))
-        db.insert_user_data_django(name, gender, count, upvotes, thanks, current_time, candidate)
+        discover_new_links(profile_content)
+        count = get_followers_count(profile_content)
+        upvotes = get_upvotes(profile_content)
+        thanks = get_thanks(profile_content)
+        # current_time = time.strftime(ISOTIMEFORMAT, time.localtime(time.time()))
+        # timezone.activate('Asia/Shanghai')
+        current_time = timezone.now()
+        if name != '':
+            print(name, '\t is \t', gender, '\t followers:\t', count, '\tupvotes:', upvotes, '\tthanks:', thanks,
+                  '\ttime:',
+                  current_time)
+            # db.insert_user_data((name, gender, count, upvotes, thanks, current_time))
+            db.insert_user_data_django(name, gender, count, upvotes, thanks, current_time, candidate)
+    except HTTPError:
+        print('HTTP error')
+        HTTPError.with_traceback()
 
 
 
@@ -128,10 +133,6 @@ def get_followers_count(profile_content):
 # discoverProfile('http://www.zhihu.com/people/yang-dong-54-6')
 
 if __name__ == '__main__':
-    while len(profile_ready) > 0:
-        for startUrl in profile_ready:
-            discoverProfile(startUrl)
-            profile_complete.append(startUrl)
-            profile_ready.remove(startUrl)
+    discoverProfile('http://www.zhihu.com/people/wei-fei-28-42', 'wei-fei-28-42')
 
 
